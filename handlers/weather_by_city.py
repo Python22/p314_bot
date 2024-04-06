@@ -66,6 +66,7 @@ async def get_weather(message: Message, state: FSMContext):
             reply_markup=main_keyboard()
         )
         await state.set_state(UserStates.user_choice_button)
+        await message.answer("Давай ещё!!!!")
     except Exception as e:
         print(e, type(e), e.args, e)
         await message.answer("😓Ой, что-то пошло не так...Дай другой город😨")
