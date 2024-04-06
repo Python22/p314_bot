@@ -27,4 +27,38 @@ async def need_weather(message: Message, state: FSMContext):
 
 @router.message(UserStates.user_choice_city, F.text)
 async def get_weather(message: Message, state: FSMContext):
-    pass
+    city = message.text
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid=024e2078c2ad10abfde94667edee771d&units=metric&lang=ru"
+    weather_data = httpx.get(url=url).json()
+    print(weather_data)
+    # longitude = weather_data["coord"]["lon"]
+    longitude, latitude = weather_data["coord"].values()
+    weather = weather_data["weather"][0]["description"]
+    temperature = weather_data["main"]["temp"]
+    feel_like = weather_data["main"]["feels_like"]
+    pressure = weather_data["main"]["pressure"]
+    humidity = weather_data["main"]["humidity"]
+    wind_speed = weather_data["wind"]["speed"]
+    wind_direction = weather_data["wind"]["deg"]
+    clouds_percentage = weather_data["clouds"]["all"]
+    sunrise = datetime.fromtimestamp(weather_data["sys"]["sunrise"])
+    sunset = datetime.fromtimestamp(weather_data["sys"]["sunset"])
+    await message.reply(
+        text=f"Город: {city}\n"
+             f"Температура: {temperature}\n"
+             f"Как ощущается: {feel_like}\n"
+             f"Общее описание: {weather}\n"
+             f"Скорость ветра: {wind_speed}\n"
+             f"Направление ветра: {wind_direction}\n"
+             f"Давление: {pressure}\n"
+             f"Влажность: {humidity}\n"
+             f"Широта: {latitude}\n"
+             f"Долгота: {longitude}\n"
+             f"Восход (по Калининградскому времени): {sunrise}\n"
+             f"Закат (по Калининградскому времени): {sunset}\n"
+             f"Восход (по Местному времени): {sunrise}\n"
+             f"Закат (по Местному времени): {sunset}\n"
+    )
+
+
+
