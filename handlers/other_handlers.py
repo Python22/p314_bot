@@ -9,3 +9,12 @@ from states import UserStates
 
 
 router = Router()
+
+
+@router.message(Command("start"))               # /start
+async def start(message: Message, state: FSMContext):
+    await message.answer(
+        text="Выбери один из пунктов: ",
+        reply_markup=main_keyboard()
+    )
+    await state.set_state(UserStates.user_choice_button)
