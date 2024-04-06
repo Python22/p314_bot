@@ -7,6 +7,7 @@ import requests
 import httpx
 import aiohttp
 from datetime import datetime
+import asyncio
 
 from keyboards.common_keyboards import main_keyboard
 from states import UserStates
@@ -22,3 +23,8 @@ async def need_weather(message: Message, state: FSMContext):
         reply_markup=ReplyKeyboardRemove()
     )
     await state.set_state(UserStates.user_choice_city)
+
+
+@router.message(UserStates.user_choice_city, F.text)
+async def get_weather(message: Message, state: FSMContext):
+    pass
